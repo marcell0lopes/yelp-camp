@@ -3,7 +3,7 @@
 <div class="row">
   <h1 class="text-center">Edit Campground</h1>
   <div class="col-6 offset-3">
-    <form method="POST" action="/campgrounds/<%=campground._id%>?_method=PUT">
+    <form method="POST" action="/campgrounds/<%=campground._id%>?_method=PUT" novalidate class="validated-form">
       <div class="mb-3">
         <label for="title" class="form-label">Title</label>
         <input
@@ -12,8 +12,11 @@
           id="title"
           name="campground[title]"
           value="<%=campground.title %>"
+          required
         />
+        <div class="invalid-feedback">Name or title required!</div>
       </div>
+
       <div class="mb-3">
         <label class="form-label" for="location">Location</label>
         <input
@@ -22,7 +25,9 @@
           id="location"
           name="campground[location]"
           value="<%=campground.location%>"
+          required
         />
+        <div class="invalid-feedback">Location required!</div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="image">Image URL:</label>
@@ -32,13 +37,17 @@
           id="image"
           name="campground[image]"
           value="<%=campground.image%>"
+          required
         />
+        <div class="invalid-feedback">Image URL required!</div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="price">Campground Price <small>(by Night)</small></label>
         <div class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1">$</span>
-          <input name="campground[price] type="text" class="form-control" id="price" placeholder="0.0" aria-label="price" aria-describedby="price-label" value="<%=campground.price%>">
+          <input name="campground[price] type="text" class="form-control" id="price" placeholder="0.0" aria-label="price" aria-describedby="price-label" value="<%=campground.price%>" required>
+          <div class="invalid-feedback">Valid price required!</div>
+          
         </div>
         <label class="form-label" for="description">Description</label>
         <textarea
@@ -46,10 +55,15 @@
           type="text"
           id="description"
           name="campground[description]"
+          required
         /><%=campground.description%></textarea>
+        <div class="invalid-feedback">Description is required!</div>
       </div>
       <button class="btn btn-warning mb-3">Update Campground</button>
     </form>
     <a class="btn btn-info" href="/campgrounds/<%= campground._id %> ">Back to <%=campground.title%>'s page</a>
   </div>
 </div>
+
+
+</script>

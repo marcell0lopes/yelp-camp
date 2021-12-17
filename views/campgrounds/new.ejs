@@ -2,7 +2,7 @@
 <div class="row">
   <h1 class="text-center">New Campground</h1>
   <div class="col-6 offset-3">
-    <form action="/campgrounds" method="POST">
+    <form action="/campgrounds" method="POST" novalidate class='validated-form'> 
       <div class="mb-3">
         <label for="title" class="form-label">Title</label>
         <input
@@ -10,7 +10,9 @@
           type="text"
           id="title"
           name="campground[title]"
+          required
         />
+        <div class="invalid-feedback">Name or title required!</div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="location">Location</label>
@@ -19,7 +21,9 @@
           type="text"
           id="location"
           name="campground[location]"
+          required
         />
+        <div class="invalid-feedback">Location required!</div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="image">Image URL:</label>
@@ -28,13 +32,16 @@
           type="text"
           id="image"
           name="campground[image]"
+          required
         />
+        <div class="invalid-feedback">Image URL required!</div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="price">Campground Price <small>(by Night)</small></label>
         <div class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1">$</span>
-          <input name="campground[price] type="text" class="form-control" id="price" placeholder="0.0" aria-label="price" aria-describedby="price-label">
+          <input name="campground[price] type="text" class="form-control" id="price" placeholder="0.0" aria-label="price" aria-describedby="price-label" required>
+          <div class="invalid-feedback">Valid price required!</div>
         </div>
         <label class="form-label" for="description">Description</label>
         <textarea
@@ -42,10 +49,15 @@
           type="text"
           id="description"
           name="campground[description]"
-        /> </textarea>
+          required
+        /></textarea>
+        <div class="invalid-feedback">Description is required!</div>        
       </div>
       <button class="btn btn-success mb-3">Add Campground</button>
     </form>
     <a class="btn btn-primary" href="/campgrounds">Back to campground list</a>
   </div>
 </div>
+
+
+
