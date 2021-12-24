@@ -1,39 +1,42 @@
 //Express
-const path = require("path");
-const express = require("express");
+const path = require('path');
+const express = require('express');
 const app = express();
-const methodOverride = require("method-override");
-const campgrounds = require("./routes/campgrounds");
-const reviews = require("./routes/reviews");
-const session = require("express-session");
-const flash = require("connect-flash");
+const methodOverride = require('method-override');
+const campgroundRoutes = require('./routes/campgrounds');
+const reviewRoutes = require('./routes/reviews');
+const userRoutes = require('./routes/users');
+const session = require('express-session');
+const flash = require('connect-flash');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const User = require('./models/user');
 
 //EJS Mate (Boilerplaiting EJS)
-const ejsMate = require("ejs-mate");
+const ejsMate = require('ejs-mate');
 
 //Util Scripts and Schemas
-const ExpressError = require("./utils/ExpressError");
+const ExpressError = require('./utils/ExpressError');
 
 //MongoDB (Mongoose)
-const mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost:27017/yelp-camp");
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/yelp-camp');
 
 const db = mongoose.connection;
-db.on("error", console.error.bind(console, "mongoose connection error:"));
-db.once("open", () => {
-  console.log("Database Connected");
+db.on('error', console.error.bind(console, 'mongoose connection error:'));
+db.once('open', () => {
+  console.log('Database Connected');
 });
 
-app.engine("ejs", ejsMate);
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
+app.engine('ejs', ejsMate);
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
-app.use(methodOverride("_method"));
-
-app.use(express.static(path.join(__dirname, "public")));
+app.use(methodOverride('_method'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 const sessionConfig = {
-  secret: "thisShouldBeABetterSecret",
+  secret: 'thisShouldBeABetterSecret',
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -43,34 +46,49 @@ const sessionConfig = {
   },
 };
 app.use(session(sessionConfig));
+
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use((req, res, next) => {
-  res.locals.success = req.flash("success");
-  res.locals.error = req.flash("error");
+  res.locals.success = req.flash('success');
+  res.locals.error = req.flash('error');
   next();
 });
 
-//Routes!
-app.use("/campgrounds", campgrounds);
-app.use("/campgrounds/:id/reviews", reviews);
+app.get('/fakeUser', async (req, res) => {
+  const user = new User({ email: 'mah@gmail.com', username: 'mahmah' });
+  const newFakeUser = await User.register(user, 'Ma@300797');
+  res.send(newFakeUser);
+});
 
-app.get("/", (req, res) => {
-  res.render("home");
+//Routes!
+app.use('/', userRoutes);
+app.use('/campgrounds', campgroundRoutes);
+app.use('/campgrounds/:id/reviews', reviewRoutes);
+
+app.get('/', (req, res) => {
+  res.render('home');
 });
 
 // Error Handlers:
 //404 error
-app.all("*", (req, res, next) => {
-  next(new ExpressError("Page Not Found", 404));
+app.all('*', (req, res, next) => {
+  next(new ExpressError('Page Not Found', 404));
 });
 
 // General Response
 app.use((err, req, res, next) => {
-  const { statusCode = 500, message = "Something Went Wrong!" } = err;
-  res.status(statusCode).render("error", { err });
+  const { statusCode = 500, message = 'Something Went Wrong!' } = err;
+  res.status(statusCode).render('error', { err });
 });
 
 app.listen(3000, () => {
-  console.log("Express Listening on port 3000");
+  console.log('Express Listening on port 3000');
 });
