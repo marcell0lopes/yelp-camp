@@ -12,7 +12,7 @@ router
 
 router
   .route('/login')
-  .get('/login', users.renderLogin)
+  .get(users.renderLogin)
   .post(
     passport.authenticate('local', {
       failureFlash: true,
