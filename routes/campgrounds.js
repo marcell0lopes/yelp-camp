@@ -7,18 +7,20 @@ const Campground = require('../models/campground');
 const Review = require('../models/review');
 const campgrounds = require('../controllers/campgrounds');
 const { isLoggedIn, validateCampground, isAuthor } = require('../middleware');
-
 const { campgroundSchema } = require('../schemas.js');
-
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 router
   .route('/')
   .get(catchAsync(campgrounds.index))
-  .post(
-    isLoggedIn,
-    validateCampground,
-    catchAsync(campgrounds.createCampground)
-  );
-
+  // .post(
+  //   isLoggedIn,
+  //   validateCampground,
+  //   catchAsync(campgrounds.createCampground)
+  // );
+  .post(upload.array('campground[image]'), (req, res) => {
+    res.send(req.body);
+  });
 router.get('/new', isLoggedIn, campgrounds.renderNewForm);
 router
   .route('/:id')
