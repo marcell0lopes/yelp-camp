@@ -8,8 +8,10 @@ const Review = require('../models/review');
 const campgrounds = require('../controllers/campgrounds');
 const { isLoggedIn, validateCampground, isAuthor } = require('../middleware');
 const { campgroundSchema } = require('../schemas.js');
+const { storage } = require('../cloudinary');
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({ storage });
+
 router
   .route('/')
   .get(catchAsync(campgrounds.index))
