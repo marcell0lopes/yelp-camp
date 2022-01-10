@@ -58,6 +58,8 @@ app.use(
 //   touchAfter: 24 * 60 * 60, //24hrs in seconds
 // });
 
+app.set('trust proxy', 1); // trust first proxy
+
 const sessionConfig = {
   store: MongoDBStore.create({
     mongoUrl: dbUrl,
