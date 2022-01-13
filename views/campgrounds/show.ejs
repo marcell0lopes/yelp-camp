@@ -39,7 +39,9 @@
       </div>
       <ul class="list-group list-group-flush">
         <li class="list-group-item text-muted"><%= campground.location%></li>
-        <li class="list-group-item">$<%= campground.price%>/night</li>
+        <li class="list-group-item">
+          $<%= campground.price%> <span class="text-muted">/dia</span>
+        </li>
       </ul>
       <% if( currentUser && campground.author.equals(currentUser._id)) {%>
       <div class="card-body">
