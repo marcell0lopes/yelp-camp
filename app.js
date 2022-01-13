@@ -52,12 +52,6 @@ app.use(
   })
 );
 
-// const store = new MongoDBStore({
-//   url: 'mongodb://localhost:27017/yelp-camp',
-//   secret: 'thisshouldbeabettersecret!',
-//   touchAfter: 24 * 60 * 60, //24hrs in seconds
-// });
-
 app.set('trust proxy', 1); // trust first proxy
 
 const sessionConfig = {
