@@ -7,3 +7,9 @@
   width: 100%;
   height: 300px;
 }
+
+@media (max-width: 755px) {
+  #cluster-map {
+    height: 250px;
+  }
+}
